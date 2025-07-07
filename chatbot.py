@@ -4,13 +4,15 @@ import streamlit as st
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from dotenv import load_dotenv
-load_dotenv()
 from langchain_groq import ChatGroq
 import os
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough, RunnableLambda
+
+
+
+api_key = st.secrets["GROQ_API_KEY"]  
 
 
 st.title("🎬 YouTube Transcript Chatbot")
@@ -61,7 +63,7 @@ if video_id and question:
 
 
 
-            embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+            embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001",google_api_key=st.secrets["GOOGLE_API_KEY"])
 
             vectorstore = FAISS.from_texts(texts=chunks, embedding=embeddings)
             vectorstore.save_local("faiss_index")
@@ -74,7 +76,7 @@ if video_id and question:
 
 
 
-            model = ChatGroq(model= "llama3-8b-8192",api_key=os.getenv("GROQ_API_KEY"))
+            model = ChatGroq(model= "llama3-8b-8192",api_key=api_key)
 
             ##Prompt Template
 
