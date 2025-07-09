@@ -9,10 +9,15 @@ import os
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough, RunnableLambda
+from langchain_community.chat_models import ChatOpenAI
+
+openrouter_key = st.secrets["openrouter"]["OPENROUTER_API_KEY"]
 
 
 
-api_key = st.secrets["GROQ_API_KEY"]  
+
+
+# api_key = st.secrets["GROQ_API_KEY"]  
 
 
 st.title("🎬 YouTube Transcript Chatbot")
@@ -74,9 +79,12 @@ if video_id and question:
 
             ## Chat Groq Model
 
+            model = ChatOpenAI(
+            openai_api_key=openrouter_key,
+            openai_api_base="https://openrouter.ai/api/v1",
+            model="google/gemma-3n-e4b-it:free")
 
-
-            model = ChatGroq(model= "llama3-8b-8192",api_key=api_key)
+            # model = ChatGroq(model= "llama3-8b-8192",api_key=api_key)
 
             ##Prompt Template
 
